@@ -35,3 +35,8 @@ Route::get('/admin/akunloket', [Admin::class, 'akunloket'])->name('admin/akunlok
 Route::post('/admin/akunloket', [Admin::class, 'addakunloket'])->name('admin/addakunloket');
 Route::post('/admin/editakunloket', [Admin::class, 'editakunloket'])->name('admin/editakunloket');
 Route::delete('/admin/hapusakunloket/{id}', [Admin::class, 'hapusakunloket'])->name('admin/hapusakunloket');
+
+Route::get('/admin/dokter', [Admin::class, 'dokter'])->name('admin/dokter');
+Route::post('/admin/dokter', [Admin::class, 'adddokter'])->name('admin/adddokter');
+Route::post('/admin/editdokter', [Admin::class, 'editdokter'])->name('admin/editdokter');
+Route::delete('/admin/hapusdokter/{id}', [Admin::class, 'hapusdokter'])->name('admin/hapusdokter');

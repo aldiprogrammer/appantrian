@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Akunloket;
 use App\Models\Antrian;
+use App\Models\Dokter;
 use App\Models\Loket;
 use App\Models\Poli;
 use Illuminate\Http\Request;
@@ -157,6 +158,59 @@ class Admin extends Controller
 
     function dokter()
     {
-        return view('admin.dokter');
+        $dokter = Dokter::all();
+        return view('admin.dokter', compact('dokter'));
+    }
+
+    function adddokter(Request $request)
+    {
+
+        $validate = $request->validate(
+            [
+                'nama' => 'required',
+                'nip' => 'required',
+                'spesialis' => 'required',
+                'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            ],
+            [
+                'nama.required' => 'Nama tidak boleh kosong',
+                'nip.required' => 'Nip tidak boleh kosong',
+                'spesialis.required' => 'Spesialis tidak boleh kosong',
+                'foto.required' => 'Foto tidak boleh kosong',
+                'foto.mimes' => 'Format gambar tidak sesuai',
+            ]
+        );
+
+        if ($validate == false) {
+            return redirect()->route('admin/dokter');
+        }
+        $path = $request->file('foto')->store('uploads', 'public');
+        $dokter = new Dokter();
+        $dokter->kode = 'DR-' . rand(0, 10000);
+        $dokter->nama_dokter = $request->nama;
+        $dokter->nip = $request->nip;
+        $dokter->spesialis = $request->spesialis;
+        $dokter->foto = $path;
+
+        $dokter->save();
+        return redirect()->route('admin/dokter')->with('sukses', 'Data berhasil disimpan');
+    }
+
+    function editdokter(Request $request)
+    {
+        $dokter = Dokter::find($request->id);
+        $dokter->nama_dokter = $request->nama;
+        $dokter->nip = $request->nip;
+        $dokter->spesialis = $request->spesialis;
+        $dokter->save();
+
+        return redirect()->route('admin/dokter')->with('sukses', 'Data berhasil diubah');
+    }
+
+    function hapusdokter($id)
+    {
+        $dokter = Dokter::find($id);
+        $dokter->delete();
+        return response()->json(['success', 'data berhasil dihapus']);
     }
 }
