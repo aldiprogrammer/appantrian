@@ -62,6 +62,7 @@
          type : 'POST',
          data : {
          id : id,
+         id_loket : '{{ session('id_loket') }}',
          _token: '{{ csrf_token() }}'
 
          },

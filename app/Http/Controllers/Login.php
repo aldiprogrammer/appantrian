@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Akunloket;
+use App\Models\Loket;
 use App\Models\Pasien;
 
 use Illuminate\Http\Request;
@@ -14,7 +16,8 @@ class Login extends Controller
 
     function index()
     {
-        return view('auth/login');
+        $loket = Loket::all();
+        return view('auth/login', compact('loket'));
     }
 
     function actlogin(Request $request)
@@ -31,15 +34,17 @@ class Login extends Controller
         if ($validate == false) {
             return redirect()->back('/login');
         }
-        $pasien = Pasien::where('username', $request->username)->first();
+        $pasien = Akunloket::where('username', $request->username)->first();
         if ($pasien && Hash::check($request->password, $pasien->password)) {
 
             $loglogin = [
+                'id_loket' => $pasien->id_loket,
+                'role' => $pasien->role,
                 'username' => $request->username,
                 'password' => $request->password,
             ];
             session($loglogin);
-            return redirect()->route('/masuk');
+            return redirect()->route('/admin');
         } else {
 
             return redirect()->Route('/login')->with('field', 'Username atau password salah');

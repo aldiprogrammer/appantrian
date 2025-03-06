@@ -12,6 +12,7 @@ class Akunloket extends Model
         'id_loket',
         'username',
         'password',
+        'role'
     ];
 
 

@@ -10,11 +10,10 @@
                     <div class="card-body">
                     <label class="fw-bold"><i class="fas fa-info-circle"></i> Selamat datang di sistem antrian digital RSU PUTRI BIDADARI</label>
                     </div>
-                   
                 </div>
                <div class="card">
                 <div class="card-header">
-                    <p>Pilih poli klinik yang anda inginkan</p>
+                    <h4 class="fw-bold text-center">PILIH POLI SESUAI KELUHAN ANDA </h4>
                 </div>
                 <div class="card-body">
                     <div class="row">

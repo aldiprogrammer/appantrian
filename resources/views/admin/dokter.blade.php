@@ -115,23 +115,47 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="/admin/editdokter">
+                                <form method="post" action="/admin/editdokter" enctype="multipart/form-data">
+
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $data->id }}">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Nama</label>
                                         <input type="text" value="{{ $data->nama_dokter }}" name="nama" class="form-control">
+                                    @error('nama')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+
                                     </div>
 
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">Nip</label>
                                         <input type="text" value="{{ $data->nip }}" class="form-control" name="nip" id="exampleInputPassword1">
+                                     @error('nip')
+                                         <small class="text-danger">{{ $message }}</small>
+                                     @enderror
+
                                     </div>
 
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">Spesialis</label>
                                         <input type="text" value="{{ $data->spesialis }}" class="form-control" name="spesialis" id="exampleInputPassword1">
+                                        @error('spesialis')
+                                             <small class="text-danger">{{ $message }}</small>
+
+                                        @enderror
                                     </div>
+
+                                   <div class="form-group">
+                                       <label for="exampleInputPassword1">Foto</label>
+                                       <input type="file" class="form-control" name="foto" id="exampleInputPassword1">
+                                       @error('foto')
+                                       <small class="text-danger">{{ $message }}</small>
+                                       @enderror
+
+                                   </div>
+
+
 
 
 

@@ -32,11 +32,20 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">APP Antrian</div>
+
+                @if(session('role') == 'Loket')
+                      <div class="sidebar-brand-text mx-3">{{ session('username') }}</div>
+                @endif
+
+                @if(session('role') == 'Admin')
+                <div class="sidebar-brand-text mx-3">App Antrian</div>
+                @endif
+
+              
             </a>
 
             <!-- Divider -->
@@ -57,43 +66,52 @@
                 Interface
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Data</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="/admin/poli">Data Poli</a>
-                        <a class="collapse-item" href="/admin/loket">Data Loket</a>
-                        <a class="collapse-item" href="cards.html">Data Pasien</a>
-                        <a class="collapse-item" href="cards.html">Data Dokter</a>
+            @if(session('role') == 'Admin')
+                 <!-- Nav Item - Pages Collapse Menu -->
+                 <li class="nav-item">
+                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                         <i class="fas fa-fw fa-cog"></i>
+                         <span>Data</span>
+                     </a>
+                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                         <div class="bg-white py-2 collapse-inner rounded">
+                             <a class="collapse-item" href="/admin/poli">Data Poli</a>
+                             <a class="collapse-item" href="/admin/loket">Data Loket</a>
+                             <a class="collapse-item" href="cards.html">Data Pasien</a>
+                             <a class="collapse-item" href="/admin/dokter">Data Dokter</a>
 
 
-                    </div>
-                </div>
-            </li>
+                         </div>
+                     </div>
+                 </li>
 
+
+                 <!-- Nav Item - Charts -->
+                 <li class="nav-item">
+                     <a class="nav-link" href="/admin/antrian">
+                         <i class="fas fa-fw fa-chart-area"></i>
+                         <span>Antrian</span></a>
+                 </li>
+
+                 <!-- Nav Item - Tables -->
+
+                 <li class="nav-item">
+                     <a class="nav-link" href="/admin/akunloket">
+                         <i class="fas fa-user"></i>
+                         <span>Akun Loket</span></a>
+                 </li>
+            @endif
+            
+            @if(session('role') == 'Loket')
+                   <li class="nav-item">
+                       <a class="nav-link" href="/admin/antrian">
+                           <i class="fas fa-fw fa-chart-area"></i>
+                           <span>Antrian</span></a>
+                   </li>
+
+
+            @endif
            
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/antrian">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Antrian</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/dokter">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Dokter</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/admin/akunloket">
-                    <i class="fas fa-user"></i>
-            <span>Akun Loket</span></a>
-            </li>
 
 
             <!-- Divider -->
@@ -519,8 +537,120 @@
 
             }
 
-         </script>
+            function hapusdokter(id){
+            Swal.fire({
+            title: "Oops",
+            text: "Apakah anda ingin menghapus data ini?",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes"
+            }).then((result) => {
+            if (result.isConfirmed) {
 
-            </body>
+            $.ajax({
+            url : '/admin/hapusdokter/'+id,
+            type : "DELETE",
+            data : {
+            _token : '{{ csrf_token() }}'
+            },
+            success:function(response){
+            // jalankan fungsi jika data berhasil di hapus
+            Swal.fire({
+            title: "Yess"
+            , text: "Data berhasil dihapus"
+            , icon: "success"
+            }).then(() => {
+            location.reload();
+            })
 
-            </html>
+
+            },
+
+            error:function(error){
+            Swal.fire({
+            title: "Opps"
+            , text: "Data gaga; dihapus"
+            , icon: "error"
+            });
+
+            }
+            })
+            }
+            });
+
+            }
+    
+    function panggil(id, kode, loket){
+        let bel = new Audio("/sound/bel.mp3");
+        bel.onended = function(){
+                sound(id, kode, loket);
+                sound(id, kode, loket);
+
+        } 
+        bel.play();
+        
+        updatestataus(id, kode);
+
+    }
+
+    function sound(id, kode, loket){
+        // alert(id);
+        let text = "Kode antrian "+ kode + "Silahkan masuk ke loket sesuai tiket anda";
+            if ('speechSynthesis' in window) {
+            let speech = new SpeechSynthesisUtterance(text);
+
+            // Pilih suara Bahasa Indonesia
+            let voices = speechSynthesis.getVoices();
+            let indoVoice = voices.find(voice => voice.lang === "id-ID");
+
+            if (indoVoice) {
+            speech.voice = indoVoice;
+            }
+
+            speech.lang = "id-ID"; // Bahasa Indonesia
+            speech.rate = 1; // Kecepatan suara (1 = normal)
+            speech.pitch = 0; // Pitch suara
+
+            window.speechSynthesis.speak(speech);
+            } else {
+            alert("Browser kamu tidak mendukung Web Speech API!");
+            }
+
+    }
+
+
+    function updatestataus(id, kode){
+        $.ajax({
+            url : '/admin/updateantrian',
+            type : 'POST',
+            data : {
+                id : id,
+                 _token : '{{ csrf_token() }}'
+            },
+
+            success : function(respnse){
+                // console.log('berhasil');
+                $("#show-antrian").show();
+                $("#no-antrian").hide();
+                $("#kode-antrian").text(kode)
+                // $("#show-antrian").text(kode)
+
+                
+                
+            },
+            error : function(err){
+                console.log(err);
+                
+            }
+            
+        });
+    }
+
+
+</script>
+
+</body>
+
+</html>

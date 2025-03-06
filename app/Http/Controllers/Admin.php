@@ -20,9 +20,10 @@ class Admin extends Controller
 
     function poli()
     {
-        $poli = Poli::all();
+        $poli = Poli::with('dokter')->get();
         $kode = 'PL-' . rand(0, 100000);
-        return view('admin.poli', compact('poli', 'kode'));
+        $dokter = Dokter::all();
+        return view('admin.poli', compact('poli', 'kode', 'dokter'));
     }
 
     function addpoli(Request $request)
@@ -33,6 +34,7 @@ class Admin extends Controller
         $pl = new Poli();
         $pl->kode = $kode;
         $pl->poli = $poli;
+        $pl->id_dokter = $request->dokter;
         $pl->save();
         return redirect()->route('admin/poli')->with('sukses', 'Data berhasil disimpan');
     }
@@ -42,6 +44,7 @@ class Admin extends Controller
         $id = $request->id;
         $poli = Poli::find($id);
         $poli->poli = $request->poli;
+        $poli->id_dokter = $request->dokter;
         $poli->save();
         return redirect()->route('admin/poli')->with('sukses', 'Data berhasil diubah');
     }
@@ -115,8 +118,14 @@ class Admin extends Controller
 
     function antrian()
     {
-        $antrian = Antrian::all();
-        return view('admin.antrian', compact('antrian'));
+        if (session('id_loket') !== null) {
+            $antrian = Antrian::where('id_loket', session('id_loket'))->get();
+        } else {
+            $antrian = Antrian::all();
+        }
+
+        $cekantrian = Antrian::where('tgl_antrian', date('Y-m-d'))->where('status', '1')->orderBy('id', 'desc')->first();
+        return view('admin.antrian', compact('antrian', 'cekantrian'));
     }
 
 
@@ -135,6 +144,7 @@ class Admin extends Controller
         $akun->username = $request->username;
         $akun->id_loket = $request->loket;
         $akun->password = Hash::make($request->password);
+        $akun->role = $request->role;
         $akun->save();
         return redirect()->route('admin/akunloket')->with('sukses', 'Data berhasil disimpan');
     }
@@ -198,12 +208,37 @@ class Admin extends Controller
 
     function editdokter(Request $request)
     {
+
+        $validate = $request->validate(
+            [
+                'nama' => 'required',
+                'nip' => 'required',
+                'spesialis' => 'required',
+                'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            ],
+            [
+                'nama.required' => 'Nama tidak boleh kosong',
+                'nip.required' => 'Nip tidak boleh kosong',
+                'spesialis.required' => 'Spesialis tidak boleh kosong',
+                'foto.required' => 'Foto tidak boleh kosong',
+                'foto.mimes' => 'Format gambar tidak sesuai',
+            ]
+        );
+
+        if ($validate == false) {
+            return redirect()->route('admin/dokter');
+        }
         $dokter = Dokter::find($request->id);
         $dokter->nama_dokter = $request->nama;
         $dokter->nip = $request->nip;
         $dokter->spesialis = $request->spesialis;
-        $dokter->save();
 
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('uploads', 'public');
+            $dokter->foto = $path;
+        }
+
+        $dokter->save();
         return redirect()->route('admin/dokter')->with('sukses', 'Data berhasil diubah');
     }
 
@@ -212,5 +247,14 @@ class Admin extends Controller
         $dokter = Dokter::find($id);
         $dokter->delete();
         return response()->json(['success', 'data berhasil dihapus']);
+    }
+
+    function updateantrian(Request $request)
+    {
+        $antrian = Antrian::find($request->id);
+        $antrian->status = 1;
+        $antrian->save();
+
+        return response()->json(['success', 'Data berashil diupdate']);
     }
 }

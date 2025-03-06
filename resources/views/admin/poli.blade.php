@@ -33,6 +33,16 @@
                                     <input type="text" class="form-control" name="poli" id="exampleInputPassword1">
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="">Dokter</label>
+                                    <select name="dokter" id="" class="form-control">
+                                        <option value="">-- Pilih Dokter --</option>
+                                        @foreach ($dokter as $data )
+                                            <option value="{{ $data->id }}">{{ $data->nama_dokter }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                        </div>
                        <div class="modal-footer">
                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
@@ -52,6 +62,7 @@
                       <th scope="col">No</th>
                       <th scope="col">Kode</th>
                       <th scope="col">Poli</th>
+                      <th scope="col">Dokter</th>
                       <th scope="col">Opsi</th>
                   </tr>
               </thead>
@@ -64,6 +75,7 @@
                       <th scope="row">{{ $no++ }}</th>
                       <td>{{ $data->kode }}</td>
                       <td>{{ $data->poli }}</td>
+                      <td>{{ $data->dokter->nama_dokter}}</td>
                       <td>
                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal{{ $data->kode }}">
                             <i class="fas fa-edit"></i> Edit
@@ -95,6 +107,17 @@
                                            <label for="exampleInputPassword1">Nama Poli</label>
                                            <input type="text" class="form-control" value="{{ $data->poli }}" name="poli" id="exampleInputPassword1">
                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="">Dokter</label>
+                                            <select name="dokter" id="" class="form-control">
+                                                <option class="bg-primary text-white" value="{{ $data->id_dokter }}">{{ $data->dokter->nama_dokter }}</option>
+                                                @foreach ($dokter as $data )
+                                                <option value="{{ $data->id }}">{{ $data->nama_dokter }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
 
                                </div>
                                <div class="modal-footer">

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode');
             $table->string('poli');
+            $table->string('id_dokter');
             $table->timestamps();
         });
     }

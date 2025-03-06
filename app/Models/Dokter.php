@@ -14,4 +14,9 @@ class Dokter extends Model
         'spesialis',
         'foto'
     ];
+
+    function poli()
+    {
+        return $this->hasMany(Poli::class, 'id_dokter');
+    }
 }

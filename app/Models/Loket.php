@@ -20,6 +20,6 @@ class Loket extends Model
 
     function akunloket()
     {
-        return $this->hasMany(Loket::class, 'id_loket');
+        return $this->hasMany(Akunloket::class, 'id_loket');
     }
 }

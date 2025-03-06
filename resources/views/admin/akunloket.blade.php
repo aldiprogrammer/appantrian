@@ -46,6 +46,18 @@
                                  <input type="password" name="password" class="form-control">
                              </div>
 
+                               <div class="form-group">
+                                   <label for="exampleInputPassword1">Role</label>
+                                   <select name="role" id="" class="
+                                 form-control">
+                                       <option>-- Pilih Role -- </option>                                      
+                                       <option>Admin</option>
+                                        <option>Loket</option>
+                                   </select>
+                               </div>
+
+
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
@@ -66,6 +78,7 @@
                     <th scope="col">Loket</th>
                     <th scope="col">Username</th>
                     <th scope="col">Password</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Opsi</th>
                 </tr>
             </thead>
@@ -79,6 +92,7 @@
                     <td><span class="badge badge-primary">{{ $data->loket->loket }}</span></td>
                     <td>{{ $data->username }}</td>
                     <td>*******************</td>
+                    <td>{{ $data->role }}</td>
                     <td>
                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal{{ $data->kode }}">
                             <i class="fas fa-edit"></i> Edit
@@ -105,7 +119,7 @@
                                          <label for="exampleInputPassword1">Loket</label>
                                          <select name="loket" id="" class="
                                             form-control">
-                                            <option class="bg-info text-white">{{ $data->loket->loket }}</option>
+                                            <option value="{{ $data->id_loket }}" class="bg-info text-white">{{ $data->loket->loket }}</option>
                                              @foreach ($loket as $data2 )
                                              <option value="{{ $data2->id }}">{{ $data2->loket }}</option>
                                              @endforeach
@@ -118,6 +132,17 @@
                                          <label for="exampleInputEmail1">Username</label>
                                          <input type="text" value="{{ $data->username }}" name="username" class="form-control">
                                      </div>
+
+                                       <div class="form-group">
+                                           <label for="exampleInputPassword1">Role</label>
+                                           <select name="role" id="" class="
+                                          form-control">
+                                               <option class="bg-primary text-white">{{ $data->role }}</option>
+                                               <option>Admin</option>
+                                               <option>Loket</option>
+                                           </select>
+                                       </div>
+
 
 
                             </div>

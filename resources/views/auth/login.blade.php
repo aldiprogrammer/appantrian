@@ -14,8 +14,8 @@
             <label for="password" class="form-label">Password</label>
             <input type="password" name="password" class="form-control" id="password" placeholder="Masukkan password">
         </div>
-        <div class="mb-3 forgot-password">
-            <a href="/register">Belum punya akun ? </a>
+        <div class="mb-3 text-center">
+           <small>Masukan username dan password dengan benar</small>
         </div>
         <button type="submit" class="btn btn-primary btn-login">Masuk</button>
     </form>

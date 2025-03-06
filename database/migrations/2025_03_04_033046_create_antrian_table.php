@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('id_poli');
             $table->string('poli');
+            $table->string('id_loket');
             $table->string('kode_antrian');
             $table->string('tgl_antrian');
+            $table->string('status');
             $table->timestamps();
         });
     }

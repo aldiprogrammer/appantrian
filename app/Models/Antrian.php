@@ -10,7 +10,9 @@ class Antrian extends Model
     protected $fillable = [
         'id_poli',
         'poli',
+        'id_loket',
         'kode_antrian',
-        'tgl_antrian'
+        'tgl_antrian',
+        'status',
     ];
 }

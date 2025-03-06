@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/', [App::class, 'index'])->name('/');
 Route::get('login', [Login::class, 'index'])->name('/login');
 Route::get('/register', [Register::class, 'index'])->name('/register');
 Route::post('/actregister', [Register::class, 'actregister'])->name('/actregister');
 Route::post('/actlogin', [Login::class, 'actlogin'])->name('/actlogin');
-Route::get('/masuk', [App::class, 'index'])->name('/masuk');
+// Route::get('/masuk', [App::class, 'index'])->name('/masuk');
 Route::post('/addantrian', [App::class, 'add_antrian'])->name('/addantrian');
 Route::get('/addantrian', [App::class, 'add_antrian'])->name('/addantrian');
 
@@ -40,3 +40,4 @@ Route::get('/admin/dokter', [Admin::class, 'dokter'])->name('admin/dokter');
 Route::post('/admin/dokter', [Admin::class, 'adddokter'])->name('admin/adddokter');
 Route::post('/admin/editdokter', [Admin::class, 'editdokter'])->name('admin/editdokter');
 Route::delete('/admin/hapusdokter/{id}', [Admin::class, 'hapusdokter'])->name('admin/hapusdokter');
+Route::post('/admin/updateantrian', [Admin::class, 'updateantrian'])->name('admin/updateantrian');
